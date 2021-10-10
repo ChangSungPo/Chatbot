@@ -382,16 +382,16 @@ def talkuser(messaging_event):
                 if addr:
                     client.send_text_message(recipient_id,"I have recognized some text fragments:\n"+addr)
                     client.send_text_message(recipient_id,"then try to combine....")
-                    georesult = requests.get(url = "http://api.opencube.tw/location/address", params = {'keyword':addr, 'key':"AIzaSyBI4ALNfd_6bVXSPG2h1Z-WxRbu0kuOWZs"}) 
-                    geojson = georesult.json()
-                    if geojson['status'] == 200:  # if the api return OK status
-                        client.send_text_message(recipient_id, geojson['data']['full_address'])
-                        btn_tmp = [ActionButton(ButtonType.POSTBACK,"address_correct", payload = geojson['data']['full_address']), ActionButton(ButtonType.POSTBACK, "Add Detail", payload = geojson['data']['full_address'])]
-                        client.send_button_message(recipient_id, "If address is correct, please click button. Or you could re-upload one more time. Or you could input the address in text! Or you could add some detail about the location", get_btn_dict(btn_tmp))
-                        tablevoiceone.update_item(Key={'sender_idz': recipient_id},UpdateExpression="set address = :a, email = :b, latz = :c, longz = :d, details = :e",ExpressionAttributeValues={':a': geojson['data']['full_address'], ':b':geojson['data']['city'], ':c': str(geojson['data']['lat']), ':d':str(geojson['data']['lng']), ':e':"-"})         
-                    else:
-                        client.send_image_url(recipient_id, img_sorry)
-                        client.send_text_message(recipient_id, "Sorry, Cyclone couldn't use AI to identify the doorplate.\n\nYou could re-upload one more time or input the address in text!")
+                    # georesult = requests.get(url = "http://api.opencube.tw/location/address", params = {'keyword':addr, 'key':"AIzaSyBI4ALNfd_6bVXSPG2h1Z-WxRbu0kuOWZs"}) 
+                    # geojson = georesult.json()
+                    # if geojson['status'] == 200:  # if the api return OK status
+                    #     client.send_text_message(recipient_id, geojson['data']['full_address'])
+                    #     btn_tmp = [ActionButton(ButtonType.POSTBACK,"address_correct", payload = geojson['data']['full_address']), ActionButton(ButtonType.POSTBACK, "Add Detail", payload = geojson['data']['full_address'])]
+                    #     client.send_button_message(recipient_id, "If address is correct, please click button. Or you could re-upload one more time. Or you could input the address in text! Or you could add some detail about the location", get_btn_dict(btn_tmp))
+                    #     tablevoiceone.update_item(Key={'sender_idz': recipient_id},UpdateExpression="set address = :a, email = :b, latz = :c, longz = :d, details = :e",ExpressionAttributeValues={':a': geojson['data']['full_address'], ':b':geojson['data']['city'], ':c': str(geojson['data']['lat']), ':d':str(geojson['data']['lng']), ':e':"-"})         
+                    # else:
+                    client.send_image_url(recipient_id, img_sorry)
+                    client.send_text_message(recipient_id, "Sorry, Cyclone couldn't use AI to identify the doorplate.\n\nYou could re-upload one more time or input the address in text!")
                 else:
                     client.send_text_message(recipient_id, "Oops! It seems not like a doorplate. You could re-upload one more time or input the address in text!")
 
