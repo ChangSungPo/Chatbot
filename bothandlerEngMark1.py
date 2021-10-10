@@ -384,7 +384,7 @@ def talkuser(messaging_event):
                     client.send_text_message(recipient_id,"I have recognized some text fragments:\n"+addr)
                     client.send_text_message(recipient_id,"then try to combine....")
                     georesult = requests.get(url = "http://api.opencube.tw/location/address", params = {'keyword':addr, 'key':google_API_Key}) 
-                    geojson = georesult.json()
+                    # geojson = georesult.json()
                     # if geojson['status'] == 200:  # if the api return OK status
                     #     client.send_text_message(recipient_id, geojson['data']['full_address'])
                     #     btn_tmp = [ActionButton(ButtonType.POSTBACK,"address_correct", payload = geojson['data']['full_address']), ActionButton(ButtonType.POSTBACK, "Add Detail", payload = geojson['data']['full_address'])]
