@@ -259,15 +259,16 @@ def talkuser(messaging_event):
             client.send_button_message(recipient_id, "Location: "+messaging_event["postback"]["payload"]+"(Detail: "+item['details']+")\n\nPlease input your details in text.\nTo use old details, please click 【address_correct】 button.", get_btn_dict(btn_tmp)) #send message and button            
         
         elif (switch==5 or switch==8) and payloadtx == "address_correct": # to confirm the address
-            georesult = requests.get(url = "http://api.opencube.tw/location/address", params = {'keyword':messaging_event["postback"]["payload"], 'key':google_API_Key}) 
+            georesult = requests.get(url = "https://maps.googleapis.com/maps/api/geocode/json?language=zh-TW&address=" + messaging_event["postback"]["payload"] + "&key=" + google_API_Key)
+            # georesult = requests.get(url = "http://api.opencube.tw/location/address", params = {'keyword':messaging_event["postback"]["payload"], 'key':google_API_Key}) 
             geojson = georesult.json()
-            if geojson['data']['country']=="TW": # if it is a location within Taiwan
+            if geojson['results'][0]['address_components'][5]['short_name']=="TW": # if it is a location within Taiwan
                 intaiwan = 1
             else:
                 intaiwan = 0    
             name = item['namez']
             phone = item['pnum']
-            addr = geojson['data']['full_address']
+            addr = geojson['results'][0]['formatted_address']
             client.send_text_message(recipient_id,"Thanks！Cyclone will use AI to review your report, please hold...")
             score = 10
             if (len(addr)<5 or len(addr)>30):  # to discount the score if the address is too short or too long, this is a turn around be we re-train the AI
@@ -276,7 +277,7 @@ def talkuser(messaging_event):
                 score = round(score * 0.8) 
             if ("號" not in addr): # as above, discount if the address doesn't contain any important keyword
                 score = round(score * 0.6) 
-            tablevoiceone.update_item(Key={'sender_idz': recipient_id},UpdateExpression="set switch = :a, score=:b, address=:c, email=:d, localz=:e, latz=:f, longz=:g",ExpressionAttributeValues={':a': 6, ':b':int(score), ':c':addr, ':d':geojson['data']['city'], ':e':int(intaiwan), ':f':str(geojson['data']['lat']), ':g':str(geojson['data']['lng'])})         
+            tablevoiceone.update_item(Key={'sender_idz': recipient_id},UpdateExpression="set switch = :a, score=:b, address=:c, email=:d, localz=:e, latz=:f, longz=:g",ExpressionAttributeValues={':a': 6, ':b':int(score), ':c':addr, ':d':geojson['results'][0]['address_components'][4]['long_name'], ':e':int(intaiwan), ':f':str(geojson['results'][0]['geometry']['location']['lat']), ':g':str(geojson['results'][0]['geometry']['location']['lng'])})         
             if score >= 7:
                 client.send_image_url(recipient_id, img_great)
                 client.send_button_message(recipient_id, "Great, you will receive "+str(score)+" points by this report！\n\nUser ID: "+str(name)+"\nContact Number: "+str(phone)+"\nLocation: "+addr+"(detail:"+str(item['details'])+")", buttons4) #send if enough points
@@ -332,13 +333,14 @@ def talkuser(messaging_event):
         
         elif switch == 5: #send address in text message
             client.send_text_message(recipient_id,"Thanks！Cyclone will use AI to organize, please hold...")
-            georesult = requests.get(url = "http://api.opencube.tw/location/address", params = {'keyword':text, 'key':google_API_Key}) 
+            georesult = requests.get(url = "https://maps.googleapis.com/maps/api/geocode/json?language=zh-TW&address=" + text + "&key=" + google_API_Key)
+            # georesult = requests.get(url = "http://api.opencube.tw/location/address", params = {'keyword':text, 'key':google_API_Key}) 
             geojson = georesult.json()
-            if geojson['status'] == 200:  # if the api return OK status
-                client.send_text_message(recipient_id, geojson['data']['full_address'])
-                btm_tmp = [ActionButton(ButtonType.POSTBACK, "address_correct", payload = geojson['data']['full_address']), ActionButton(ButtonType.POSTBACK, "Add Detail", payload = geojson['data']['full_address'])]
+            if geojson['status'] == 'OK':  # if the api return OK status
+                client.send_text_message(recipient_id, geojson['results'][0]['formatted_address'])
+                btm_tmp = [ActionButton(ButtonType.POSTBACK, "address_correct", payload = geojson['results'][0]['formatted_address']), ActionButton(ButtonType.POSTBACK, "Add Detail", payload = geojson['results'][0]['formatted_address'])]
                 client.send_button_message(recipient_id, "If address is correct, please click button. Or you could upload the closest doorplate. Or you could re-input the address! Or you could add some detail about the location", get_btn_dict(btm_tmp))
-                tablevoiceone.update_item(Key={'sender_idz': recipient_id},UpdateExpression="set address = :a, email = :b, latz = :c, longz = :d, details = :e",ExpressionAttributeValues={':a': geojson['data']['full_address'], ':b':geojson['data']['city'], ':c': str(geojson['data']['lat']), ':d':str(geojson['data']['lng']), ':e':"-"})         
+                tablevoiceone.update_item(Key={'sender_idz': recipient_id},UpdateExpression="set address = :a, email = :b, latz = :c, longz = :d, details = :e",ExpressionAttributeValues={':a': geojson['results'][0]['formatted_address'], ':b':geojson['results'][0]['address_components'][4]['long_name'], ':c': str(geojson['results'][0]['geometry']['location']['lat']), ':d':str(geojson['results'][0]['geometry']['location']['lng']), ':e':"-"})         
             else:
                 client.send_image_url(recipient_id, img_sorry)
                 client.send_text_message(recipient_id, "Sorry, Cyclone counldn't understand your address, you could upload the closest doorplate. Or you could re-input the address!")
