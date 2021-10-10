@@ -13,9 +13,9 @@ WEBHOOK = '/webhook'
 VERIFY_TOKEN = os.environ['VERIFY_TOKEN']
 client = Bot(os.environ['ACCESS_TOKEN'])
 
-@app.route('/')
-def hello_world():
-    return 'Hello, World!'
+# @app.route('/')
+# def hello_world():
+#     return 'Hello, World!'
 
 @app.route(WEBHOOK, methods=["GET"])
 def fb_webhook():
