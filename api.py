@@ -11,7 +11,7 @@ from messenger.bot import Bot
 app = Flask(__name__)
 WEBHOOK = '/webhook'
 VERIFY_TOKEN = os.environ['VERIFY_TOKEN']
-client = Bot(os.environ['ACCESS_TOKEN'])
+# client = Bot(os.environ['ACCESS_TOKEN'])
 
 @app.route('/')
 def hello_world():
@@ -34,14 +34,14 @@ def fb_receive_message():
         for message in entry['messaging']:
             if message.get('message'):
                 # debug
-                sender_id = message.get('sender').get('id')
-                client.send_text_message(sender_id, "收到訊息")
+                # sender_id = message.get('sender').get('id')
+                # client.send_text_message(sender_id, "收到訊息")
                 # handle message
             #     print('message')
-            #     bot_handler.handle_message(message)
-            # elif message.get('postback'):
+                bot_handler.handle_message(message)
+            elif message.get('postback'):
             #     print('postback')
-            #     bot_handler.handle_message(message)
+                bot_handler.handle_message(message)
     return "Hi"
 
 
