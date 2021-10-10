@@ -1,4 +1,4 @@
-import pymessenger.utils as utils
+import messenger.utils as utils
 
 DEFAULT_API_VERSION = 2.6
 

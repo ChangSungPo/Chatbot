@@ -4,7 +4,7 @@ import requests
 from enum import Enum
 from requests_toolbelt import MultipartEncoder
 
-from pymessenger.graph_api import FacebookGraphApi
+from messenger.graph_api import FacebookGraphApi
 
 class ContentType(Enum):
     TEXT = "text"
