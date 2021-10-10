@@ -30,6 +30,7 @@ tablevoiceone = mydb.Table('voiceone') # we use a table named 'voiceone' to do a
 tablereport = mydb.Table('bikereport') # this table is to save all report data from users.
 tablereportbackup = mydb.Table('bikereportbackup') # this table is to save all report data from users.
 
+google_API_Key = os.environ["GoogleAPIKey"]
 img_great = os.environ["GREAT"]
 img_sorry = os.environ["SORRY"]
 img_cry = os.environ["CRY"]
@@ -258,7 +259,7 @@ def talkuser(messaging_event):
             client.send_button_message(recipient_id, "Location: "+messaging_event["postback"]["payload"]+"(Detail: "+item['details']+")\n\nPlease input your details in text.\nTo use old details, please click 【address_correct】 button.", get_btn_dict(btn_tmp)) #send message and button            
         
         elif (switch==5 or switch==8) and payloadtx == "address_correct": # to confirm the address
-            georesult = requests.get(url = "http://api.opencube.tw/location/address", params = {'keyword':messaging_event["postback"]["payload"], 'key':"AIzaSyBI4ALNfd_6bVXSPG2h1Z-WxRbu0kuOWZs"}) 
+            georesult = requests.get(url = "http://api.opencube.tw/location/address", params = {'keyword':messaging_event["postback"]["payload"], 'key':google_API_Key}) 
             geojson = georesult.json()
             if geojson['data']['country']=="TW": # if it is a location within Taiwan
                 intaiwan = 1
@@ -331,7 +332,7 @@ def talkuser(messaging_event):
         
         elif switch == 5: #send address in text message
             client.send_text_message(recipient_id,"Thanks！Cyclone will use AI to organize, please hold...")
-            georesult = requests.get(url = "http://api.opencube.tw/location/address", params = {'keyword':text, 'key':"AIzaSyBI4ALNfd_6bVXSPG2h1Z-WxRbu0kuOWZs"}) 
+            georesult = requests.get(url = "http://api.opencube.tw/location/address", params = {'keyword':text, 'key':google_API_Key}) 
             geojson = georesult.json()
             if geojson['status'] == 200:  # if the api return OK status
                 client.send_text_message(recipient_id, geojson['data']['full_address'])
@@ -382,7 +383,7 @@ def talkuser(messaging_event):
                 if addr:
                     client.send_text_message(recipient_id,"I have recognized some text fragments:\n"+addr)
                     client.send_text_message(recipient_id,"then try to combine....")
-                    # georesult = requests.get(url = "http://api.opencube.tw/location/address", params = {'keyword':addr, 'key':"AIzaSyBI4ALNfd_6bVXSPG2h1Z-WxRbu0kuOWZs"}) 
+                    georesult = requests.get(url = "http://api.opencube.tw/location/address", params = {'keyword':addr, 'key':google_API_Key}) 
                     # geojson = georesult.json()
                     # if geojson['status'] == 200:  # if the api return OK status
                     #     client.send_text_message(recipient_id, geojson['data']['full_address'])
