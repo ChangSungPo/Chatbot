@@ -383,7 +383,8 @@ def talkuser(messaging_event):
                 if addr:
                     client.send_text_message(recipient_id,"I have recognized some text fragments:\n"+addr)
                     client.send_text_message(recipient_id,"then try to combine....")
-                    georesult = requests.get(url = "http://api.opencube.tw/location/address", params = {'keyword':addr, 'key':google_API_Key})
+                    georesult = requests.get(url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + addr + "&key=" + google_API_Key)
+                    # georesult = requests.get(url = "http://api.opencube.tw/location/address", params = {'keyword':addr, 'key':google_API_Key})
                     print("\n\n\ngeoresult")
                     print(georesult)
                     print("\n\n\n")
