@@ -271,7 +271,7 @@ def talkuser(messaging_event):
             addr = geojson['results'][0]['formatted_address']
             client.send_text_message(recipient_id,"Thanks！Cyclone will use AI to review your report, please hold...")
             score = 10
-            if (len(addr)<5 or len(addr)>30):  # to discount the score if the address is too short or too long, this is a turn around be we re-train the AI
+            if (len(addr)<5 or len(addr)>60):  # to discount the score if the address is too short or too long, this is a turn around be we re-train the AI
                 score = round(score * 0.7)
             # if ("路" not in addr) and ("街" not in addr): # as above, discount if the address doesn't contain any important keyword
             if (geojson['results'][0]['address_components'][1]['types'][0] != 'route'):
