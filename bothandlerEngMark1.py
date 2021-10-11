@@ -273,9 +273,11 @@ def talkuser(messaging_event):
             score = 10
             if (len(addr)<5 or len(addr)>30):  # to discount the score if the address is too short or too long, this is a turn around be we re-train the AI
                 score = round(score * 0.7)
-            if ("路" not in addr) and ("街" not in addr): # as above, discount if the address doesn't contain any important keyword
+            # if ("路" not in addr) and ("街" not in addr): # as above, discount if the address doesn't contain any important keyword
+            if (geojson['results'][0]['address_components'][1]['types'][0] != 'route'):
                 score = round(score * 0.8) 
-            if ("號" not in addr): # as above, discount if the address doesn't contain any important keyword
+            # if ("號" not in addr): # as above, discount if the address doesn't contain any important keyword
+            if (geojson['results'][0]['address_components'][0]['types'][0] != 'street_number'):
                 score = round(score * 0.6) 
             tablevoiceone.update_item(Key={'sender_idz': recipient_id},UpdateExpression="set switch = :a, score=:b, address=:c, email=:d, localz=:e, latz=:f, longz=:g",ExpressionAttributeValues={':a': 6, ':b':int(score), ':c':addr, ':d':geojson['results'][0]['address_components'][4]['long_name'], ':e':int(2), ':f':str(geojson['results'][0]['geometry']['location']['lat']), ':g':str(geojson['results'][0]['geometry']['location']['lng'])})         
             if score >= 7:
