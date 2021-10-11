@@ -388,6 +388,9 @@ def talkuser(messaging_event):
                     georesult = requests.get(url = "https://maps.googleapis.com/maps/api/geocode/json?language=en&address=" + addr + "&key=" + google_API_Key)
                     # georesult = requests.get(url = "http://api.opencube.tw/location/address", params = {'keyword':addr, 'key':google_API_Key})
                     geojson = georesult.json()
+                    print("\n\n\n")
+                    print(geojson)
+                    print("\n\n\n")
                     if geojson['status'] == 'OK':  # if the api return OK status
                         client.send_text_message(recipient_id, geojson['results'][0]['formatted_address'])
                         btn_tmp = [ActionButton(ButtonType.POSTBACK,"address_correct", payload = geojson['results'][0]['formatted_address']), ActionButton(ButtonType.POSTBACK, "Add Detail", payload = geojson['results'][0]['formatted_address'])]
