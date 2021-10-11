@@ -343,7 +343,7 @@ def talkuser(messaging_event):
                 tablevoiceone.update_item(Key={'sender_idz': recipient_id},UpdateExpression="set address = :a, email = :b, latz = :c, longz = :d, details = :e",ExpressionAttributeValues={':a': geojson['results'][0]['formatted_address'], ':b':geojson['results'][0]['address_components'][4]['long_name'], ':c': str(geojson['results'][0]['geometry']['location']['lat']), ':d':str(geojson['results'][0]['geometry']['location']['lng']), ':e':"-"})         
             else:
                 client.send_image_url(recipient_id, img_sorry)
-                client.send_text_message(recipient_id, "Sorry, Cyclone counldn't understand your address, you could upload the closest doorplate. Or you could re-input the address!")
+                client.send_text_message(recipient_id, "Cyclone counldn't understand your address, you could upload the closest doorplate. Or you could re-input the address!")
 
         elif switch == 8: #send more details about address in text message
             tablevoiceone.update_item(Key={'sender_idz': recipient_id},UpdateExpression="set switch = :a, details = :b",ExpressionAttributeValues={':a': 8, ':b':str(text)})         
@@ -398,7 +398,7 @@ def talkuser(messaging_event):
                         tablevoiceone.update_item(Key={'sender_idz': recipient_id},UpdateExpression="set address = :a, email = :b, latz = :c, longz = :d, details = :e",ExpressionAttributeValues={':a': geojson['results'][0]['formatted_address'], ':b':geojson['results'][0]['address_components'][4]['long_name'], ':c': str(geojson['results'][0]['geometry']['location']['lat']), ':d':str(geojson['results'][0]['geometry']['location']['lng']), ':e':"-"})         
                     else:
                         client.send_image_url(recipient_id, img_sorry)
-                        client.send_text_message(recipient_id, "Sorry, the information is not enough.\n\nYou could re-upload one more time or input the address in text!")
+                        client.send_text_message(recipient_id, "The information is not enough.\n\nYou could re-upload one more time or input the address in text!")
                 else:
                     client.send_text_message(recipient_id, "Oops! It seems not like a doorplate. You could re-upload one more time or input the address in text!")
 
