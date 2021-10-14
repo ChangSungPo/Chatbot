@@ -141,11 +141,12 @@ def talkuser(messaging_event):
     switch = item["switch"] #get 'switch' value. It descript the status of the user, for example switch=7 means the user is giving feedback to us
     if "postback" in messaging_event:   #In the case that the user send a postback, a special type of message. Postback is button clicked.
         payloadtx = messaging_event["postback"]["title"] #recognize response and arrange it to the valiable 'payloadtx'
-        # if payloadtx== "Get Started":
+        if payloadtx== "Get Started":
+            print("do nothing")
         #     client.send_button_message(recipient_id, title0, buttons0) #send text and buttons to welcome new user
         #     tablevoiceone.update_item(Key={'sender_idz': recipient_id},UpdateExpression="set switch = :a",ExpressionAttributeValues={':a': 0}) #update user status to entrance 
 
-        if payloadtx == "To Menu" or payloadtx =="To Menu": # in case that the user go to the entrance of the conversation
+        elif payloadtx == "To Menu" or payloadtx =="To Menu": # in case that the user go to the entrance of the conversation
             client.send_image_url(recipient_id, img_letsgo)
             client.send_button_message(recipient_id, title0, buttons0) #send text and buttons to welcome new user
             tablevoiceone.update_item(Key={'sender_idz': recipient_id},UpdateExpression="set switch = :a",ExpressionAttributeValues={':a': 0}) #update user status to entrance         
