@@ -145,7 +145,7 @@ def talkuser(messaging_event):
             client.send_button_message(recipient_id, "", buttons0) #send text and buttons to welcome new user
             tablevoiceone.update_item(Key={'sender_idz': recipient_id},UpdateExpression="set switch = :a",ExpressionAttributeValues={':a': 0}) #update user status to entrance 
 
-        if payloadtx == "To Menu" or payloadtx =="To Menu": # in case that the user go to the entrance of the conversation
+        elif payloadtx == "To Menu" or payloadtx =="To Menu": # in case that the user go to the entrance of the conversation
             client.send_image_url(recipient_id, img_letsgo)
             client.send_button_message(recipient_id, title0, buttons0) #send text and buttons to welcome new user
             tablevoiceone.update_item(Key={'sender_idz': recipient_id},UpdateExpression="set switch = :a",ExpressionAttributeValues={':a': 0}) #update user status to entrance         
