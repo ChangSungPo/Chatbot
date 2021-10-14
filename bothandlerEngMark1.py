@@ -142,7 +142,7 @@ def talkuser(messaging_event):
     if "postback" in messaging_event:   #In the case that the user send a postback, a special type of message. Postback is button clicked.
         payloadtx = messaging_event["postback"]["title"] #recognize response and arrange it to the valiable 'payloadtx'
         if payloadtx== "Get Started":
-            client.send_button_message(recipient_id, "", buttons0) #send text and buttons to welcome new user
+            client.send_button_message(recipient_id, title0, buttons0) #send text and buttons to welcome new user
             tablevoiceone.update_item(Key={'sender_idz': recipient_id},UpdateExpression="set switch = :a",ExpressionAttributeValues={':a': 0}) #update user status to entrance 
 
         elif payloadtx == "To Menu" or payloadtx =="To Menu": # in case that the user go to the entrance of the conversation
