@@ -114,7 +114,10 @@ def hasNumbers(inputString):
 def handle_message(messaging_event):  # the entrance of the chatbot. this function will be excuted for every message the user send to chatbot.
     print("messaging_event:")
     print(messaging_event)
-    talkuser(messaging_event)  # call the function name 'talkuser' in below
+    try:
+        talkuser(messaging_event)  # call the function name 'talkuser' in below
+    except:
+        pass
 
 def talkuser(messaging_event):
     recipient_id = messaging_event["sender"]["id"] #get user's unique ID to response to 
